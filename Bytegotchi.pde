@@ -28,7 +28,7 @@ void setup()
 
 void draw() {
   switch(state) {
-  case 0:
+  case 0: // choosing character
     background(100);
     textSize(100);
     fill(255);
@@ -52,7 +52,7 @@ void draw() {
     println();
     break;
 
-  case 1:
+  case 1: // main tomogachi screen
     //character moving
     background(100);
     cutie.resize(90, 100);
@@ -109,7 +109,7 @@ void serialEvent(Serial myPort) {
       buttons[3] = int(data[5].substring(0, 1)) == 1; //blue
     }
     switch(state) {
-    case 0:
+    case 0: // choosing character
       //warrior picked
       if (buttons[1]) {
         print("red");
@@ -134,7 +134,8 @@ void serialEvent(Serial myPort) {
         chosenCharacter = 2;
         break;
       }
-    case 1:
+      break;
+    case 1: // main tomogachi string
       //limits character going out of boundaries
       if (xPos < 0) 
         xPos = 0;
@@ -153,76 +154,110 @@ void serialEvent(Serial myPort) {
         //fight stage, goes to stage 2
         if (buttons[1]) {
           print("red");
-          //state = 2;
+          state = 2;
         }
         
-        //feeding if green button pressed
-        if (buttons[2]) {
-          print("green");
-          println("entered eating anim!");
-  
-          switch(chosenCharacter) {
-            
-            case 0: // knight eating
-              println("knight is eating!");
-              cutie = loadImage("graphics/redknight/redknight_eat.png");
-              delay(500);
-              cutie = loadImage("graphics/redknight/redknight.png");
-              println("knight is done eating!");
-              break;
-            case 1: // bard eating
-              println("bard is eating!");
-              cutie = loadImage("graphics/greenbard/greenbard_eat.png");
-              delay(500);
-              cutie = loadImage("graphics/greenbard/greenbard.png");
-              println("bard is done eating!");
-              break;
-            case 2: // mage eating
-              println("mage is eating!");
-              cutie = loadImage("graphics/bluemage/bluemage_eat.png");
-              delay(500);
-              cutie = loadImage("graphics/bluemage/bluemage.png");
-              println("mage is done eating!");
-              break;
-            
-          }
-         
+      //feeding if green button pressed
+      if (buttons[2]) {
+        print("green");
+        println("entered eating anim!");
+
+        switch(chosenCharacter) {
+          
+          case 0: // knight eating
+            println("knight is eating!");
+            cutie = loadImage("graphics/redknight/redknight_eat.png");
+            delay(500);
+            cutie = loadImage("graphics/redknight/redknight.png");
+            println("knight is done eating!");
+            break;
+          case 1: // bard eating
+            println("bard is eating!");
+            cutie = loadImage("graphics/greenbard/greenbard_eat.png");
+            delay(500);
+            cutie = loadImage("graphics/greenbard/greenbard.png");
+            println("bard is done eating!");
+            break;
+          case 2: // mage eating
+            println("mage is eating!");
+            cutie = loadImage("graphics/bluemage/bluemage_eat.png");
+            delay(500);
+            cutie = loadImage("graphics/bluemage/bluemage.png");
+            println("mage is done eating!");
+            break;
+          
         }
+       
+      }
+      
         //washing if blue button pressed
-        if (buttons[3]) {
-          print("blue");
-          println("entered washing anim!");
-  
-          switch(chosenCharacter) {
-            
-            case 0: // knight washing
-              println("knight is washing!");
-              cutie = loadImage("graphics/redknight/redknight_wash.png");
-              delay(500);
-              cutie = loadImage("graphics/redknight/redknight.png");
-              println("knight is done washing!");
-              break;
-            case 1: // bard eating
-              println("bard is washing!");
-              cutie = loadImage("graphics/greenbard/greenbard_wash.png");
-              delay(500);
-              cutie = loadImage("graphics/greenbard/greenbard.png");
-              println("bard is done washing!");
-              break;
-            case 2: // mage eating
-              println("mage is washing!");
-              cutie = loadImage("graphics/bluemage/bluemage_wash.png");
-              delay(500);
-              cutie = loadImage("graphics/bluemage/bluemage.png");
-              println("mage is done washing!");
-              break;
-            
-          }
-         
+      if (buttons[3]) {
+        
+        print("blue");
+        println("entered washing anim!");
+
+        switch(chosenCharacter) {
+          
+          case 0: // knight washing
+            println("knight is washing!");
+            cutie = loadImage("graphics/redknight/redknight_wash.png");
+            delay(500);
+            cutie = loadImage("graphics/redknight/redknight.png");
+            println("knight is done washing!");
+            break;
+          case 1: // bard eating
+            println("bard is washing!");
+            cutie = loadImage("graphics/greenbard/greenbard_wash.png");
+            delay(500);
+            cutie = loadImage("graphics/greenbard/greenbard.png");
+            println("bard is done washing!");
+            break;
+          case 2: // mage eating
+            println("mage is washing!");
+            cutie = loadImage("graphics/bluemage/bluemage_wash.png");
+            delay(500);
+            cutie = loadImage("graphics/bluemage/bluemage.png");
+            println("mage is done washing!");
+            break;
+          
+        }
+      
+      }
+      break;
+    case 2: // battle, player turn
+      println("fighting");
+      if(buttons[1]) { // red - attack
+        
+        // attack
         
       }
+      
+      if(buttons[2]) { // green - heal
+        
+        // heal
+        
+      }
+      
+      if(buttons[3]) { // blue - flee
+        
+        println("Fleeing battle!");
+        state = 1;
+        
+      }
+      
+      break;
+    case 3: // battle, enemy turn
+      println("enemy turn");
+      state = 2;
+      break;
+    case 4: // dead
+      println("YOU DIED !!! !!! !!!");
+      state = 0;
+    
     }
+    
   }
+  
 }
 
 //void joystick(Serial myPort) {
